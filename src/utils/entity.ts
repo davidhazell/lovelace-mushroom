@@ -23,6 +23,17 @@ export function isActive(entity: HassEntity) {
     }
 }
 
+const AUTHORIZED_UNKNOWN_STATE_DOMAINS = ["button", "input_button", "scene"];
+
 export function isAvailable(entity: HassEntity) {
-    return entity.state !== "unavailable" && entity.state !== "unknown";
+    const domain = entity.entity_id.split(".")[0];
+
+    return (
+        entity.state !== "unavailable" &&
+        (entity.state !== "unknown" || AUTHORIZED_UNKNOWN_STATE_DOMAINS.includes(domain))
+    );
+}
+
+export function isUnknown(entity: HassEntity) {
+    return entity.state === "unknown";
 }
